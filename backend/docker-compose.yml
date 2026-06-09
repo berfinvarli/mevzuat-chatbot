@@ -1,0 +1,58 @@
+services:
+  mongo:
+    image: mongo:7
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  postgres:
+    image: postgres:16
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mevzuat_chatbot
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: .
+    ports:
+      - "8001:8001"
+    secrets:
+      - openai_api_key
+      - mcp_server_url
+      - mongodb_url
+      - postgres_url
+      - admin_token
+      - client_url
+    depends_on:
+      mongo:
+        condition: service_started
+      postgres:
+        condition: service_healthy
+
+secrets:
+  openai_api_key:
+    file: ./secrets/openai_api_key.txt
+  mcp_server_url:
+    file: ./secrets/mcp_server_url.txt
+  mongodb_url:
+    file: ./secrets/mongodb_url.txt
+  postgres_url:
+    file: ./secrets/postgres_url.txt
+  admin_token:
+    file: ./secrets/admin_token.txt
+  client_url:
+    file: ./secrets/client_url.txt
+
+volumes:
+  mongo_data:
+  postgres_data:

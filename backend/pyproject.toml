@@ -1,0 +1,18 @@
+[project]
+name = "mevzuat-chatbot-backend"
+version = "0.1.0"
+description = "Mevzuat MCP tabanlı chatbot backend servisi"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.136.3",
+    "httpx>=0.28.1",
+    "mcp[cli]>=1.27.2",
+    "motor>=3.7.1",
+    "openai>=2.38.0",
+    "pydantic-settings>=2.14.1",
+    "python-dotenv>=1.2.2",
+    "sqlalchemy[asyncio]>=2.0.36",
+    "asyncpg>=0.30.0",
+    "slowapi>=0.1.9",
+    "uvicorn>=0.48.0",
+]
